@@ -1,0 +1,28 @@
+# Dependencias
+node_modules/
+**/node_modules/
+
+# Builds
+dist/
+**/dist/
+build/
+
+# Base de datos SQLite (datos locales, no van al repo)
+*.db
+*.db-shm
+*.db-wal
+
+# Logs y temporales
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Variables de entorno (secretas)
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/

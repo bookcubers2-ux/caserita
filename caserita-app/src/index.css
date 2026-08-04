@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+@layer base {
+  body {
+    @apply bg-surface font-sans text-ink antialiased;
+  }
+}
+
+@layer components {
+  /* Telefono: columna centrada de 448px. Computadora: ocupa el resto del ancho. */
+  .shell {
+    @apply relative mx-auto min-h-dvh w-full max-w-md bg-background;
+    @apply lg:mx-0 lg:max-w-none lg:flex-1 lg:bg-surface;
+  }
+  /* Contenedor interno de cada pantalla en escritorio. */
+  .pagina {
+    @apply lg:mx-auto lg:w-full lg:max-w-6xl lg:px-10 lg:pb-12 lg:pt-8;
+  }
+  .tap {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+  }
+}
+
+/* Respeta a quien pidió menos movimiento en su sistema. Los indicadores de
+   progreso (spinner del pago) siguen girando, pero mucho más lento, para no
+   perder la señal de "algo está pasando". */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-spin {
+    animation: spin 2.4s linear infinite !important;
+  }
+}
+
+/* Pines del mapa real: el HTML del divIcon se posiciona solo. */
+.caserita-pin {
+  background: transparent;
+  border: 0;
+}
+
+/* Base gris minimalista, como el mapa de las apps de delivery. */
+.leaflet-container {
+  font-family: inherit;
+  background: #eaeaea;
+  cursor: grab;
+}
+.leaflet-container:active,
+.leaflet-dragging .leaflet-container {
+  cursor: grabbing;
+}
+/* Los pines no deben robar el cursor de arrastre del mapa. */
+.leaflet-marker-icon.caserita-pin {
+  cursor: pointer;
+}
+
+.leaflet-control-attribution {
+  font-size: 9px;
+  background: rgb(255 255 255 / 0.75);
+}
+.leaflet-control-attribution a {
+  color: oklch(42.5% 0.116 144.3);
+}
