@@ -2,6 +2,7 @@
 import { Bell, ChevronRight, CircleHelp, MapPin, RotateCcw, Wallet } from 'lucide-react'
 import { useStore, useUsuario } from '../store'
 import { useTitulo } from '../lib/useTitulo'
+import Logotipo from '../components/Logotipo'
 import { LinkButton, RoleSwitch } from '../components/ui'
 
 const OPCIONES = [
@@ -102,6 +103,14 @@ export default function Perfil() {
             >
               <RotateCcw className="size-4" aria-hidden /> Reiniciar datos de la demo
             </button>
+          </div>
+
+          {/* Firma de marca, la misma frase con la que cierra el pitch. */}
+          <div className="pt-2 text-center">
+            <Logotipo className="text-lg text-brand" />
+            <p className="mt-1 text-xs font-semibold text-muted-foreground">
+              La comida que hoy se bota, mañana es un mercado.
+            </p>
           </div>
         </div>
       </div>

@@ -28,6 +28,8 @@ export interface Bolsa {
   imagen: string
   kgComida: number
   kgCO2: number
+  /** true = bolsa sorpresa: el contenido no se revela hasta el retiro. */
+  sorpresa?: boolean
 }
 
 export interface BolsaConVendedor extends Bolsa {
@@ -82,6 +84,12 @@ export interface Publicacion {
   horario: string
   vendidas: number
   estado: 'activa' | 'agotada'
+  /** Lo que el vendedor escribió del producto. Si falta, se usa la plantilla. */
+  titulo?: string
+  descripcion?: string
+  imagen?: string
+  /** true = bolsa sorpresa: el contenido no se revela hasta el retiro. */
+  sorpresa?: boolean
 }
 
 export interface Usuario {

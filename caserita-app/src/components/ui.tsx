@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Leaf, Star } from 'lucide-react'
+import { ArrowLeft, Gift, Leaf, Star } from 'lucide-react'
 
 const BTN_BASE =
   'tap inline-flex items-center justify-center gap-2 rounded-[14px] px-5 py-3 text-base font-bold transition-transform active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100'
@@ -88,6 +88,18 @@ export function Rating({ value }: { value: number }) {
       <Star className="size-4 fill-ambar text-ambar" aria-hidden />
       {value}
       <span className="sr-only">de 5 estrellas</span>
+    </span>
+  )
+}
+
+/**
+ * Marca la modalidad sorpresa. Va en gris y con borde, nunca en el verde de
+ * marca: es la excepción del catálogo, no lo que hay que mirar primero.
+ */
+export function EtiquetaSorpresa() {
+  return (
+    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+      <Gift className="size-3.5" aria-hidden /> Sorpresa
     </span>
   )
 }

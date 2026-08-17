@@ -52,10 +52,11 @@
   border: 0;
 }
 
-/* Base gris minimalista, como el mapa de las apps de delivery. */
+/* Base minimalista, como el mapa de las apps de delivery, pero en crema para
+   que mientras cargan los tiles no aparezca un gris frío sobre el papel. */
 .leaflet-container {
   font-family: inherit;
-  background: #eaeaea;
+  background: #ece5d8;
   cursor: grab;
 }
 .leaflet-container:active,
@@ -72,5 +73,5 @@
   background: rgb(255 255 255 / 0.75);
 }
 .leaflet-control-attribution a {
-  color: oklch(42.5% 0.116 144.3);
+  color: #0e5a2b;
 }

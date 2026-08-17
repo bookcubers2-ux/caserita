@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom'
 import { Clock, MapPin } from 'lucide-react'
 import type { BolsaConVendedor } from '../types'
 import { ventanaDeRecojo } from '../lib/horarios'
+import { TEXTO_SORPRESA } from '../data/seed'
 import Foto from './Foto'
-import { Rating } from './ui'
+import { EtiquetaSorpresa, Rating } from './ui'
 
 export function descuento(b: { precioViejo: number; precioNuevo: number }): number {
   return Math.round((1 - b.precioNuevo / b.precioViejo) * 100)
@@ -24,7 +25,9 @@ export default function BolsaCard({ bolsa }: { bolsa: BolsaConVendedor }) {
           alt={`${bolsa.titulo} de ${bolsa.vendedor.nombre}`}
           className={`h-40 w-full object-cover lg:h-44 ${agotada ? 'grayscale' : ''}`}
         />
-        <span className="absolute left-3 top-3 rounded-full bg-brand px-2.5 py-1 text-xs font-extrabold text-primary-foreground">
+        {/* Carbón sobre naranja, no crema: en texto de 12 px la crema sobre
+            naranja da 2.96:1 y no llega al mínimo de contraste. */}
+        <span className="absolute left-3 top-3 rounded-full bg-naranja px-2.5 py-1 text-xs font-extrabold text-ink">
           -{descuento(bolsa)}%
         </span>
         <span
@@ -42,7 +45,10 @@ export default function BolsaCard({ bolsa }: { bolsa: BolsaConVendedor }) {
             <Rating value={bolsa.vendedor.rating} />
           </span>
         </div>
-        <p className="line-clamp-2 text-sm text-muted-foreground">{bolsa.descripcion}</p>
+        {bolsa.sorpresa && <EtiquetaSorpresa />}
+        <p className="line-clamp-2 text-sm text-muted-foreground">
+          {bolsa.sorpresa ? TEXTO_SORPRESA : bolsa.descripcion}
+        </p>
         <div className="flex items-end justify-between gap-3 pt-1">
           <div className="flex items-baseline gap-2">
             <span className="text-sm text-muted-foreground line-through">Bs {bolsa.precioViejo}</span>

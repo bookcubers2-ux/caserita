@@ -41,7 +41,7 @@ export async function generarQrSvg(datos: DatosCobro): Promise<string> {
     errorCorrectionLevel: 'M',
     margin: 1,
     width: 220,
-    color: { dark: '#1f2937', light: '#00000000' },
+    color: { dark: '#17201A', light: '#00000000' },
   })
 }
 

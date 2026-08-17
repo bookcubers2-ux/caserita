@@ -83,7 +83,7 @@ export const BOLSAS: Bolsa[] = [
   {
     id: 'b1',
     vendedorId: 'v1',
-    titulo: 'Bolsa de pan del día',
+    titulo: 'Pan del día: marraqueta, cuñapé y empanadas',
     descripcion: 'Marraqueta, cuñapé y empanadas horneadas hoy temprano.',
     categoria: 'Pan del día',
     precioViejo: 35,
@@ -131,7 +131,7 @@ export const BOLSAS: Bolsa[] = [
   {
     id: 'b4',
     vendedorId: 'v4',
-    titulo: 'Bolsa de café y repostería',
+    titulo: 'Croissants, medialunas y café del día',
     descripcion: 'Croissants, medialunas y un café del día para llevar.',
     categoria: 'Repostería',
     precioViejo: 28,
@@ -191,6 +191,8 @@ export const BOLSAS: Bolsa[] = [
     imagen: '/img/restaurante.jpg',
     kgComida: 1.4,
     kgCO2: 3.6,
+    // La única sorpresa del catálogo: la modalidad es la excepción, no la regla.
+    sorpresa: true,
   },
 ]
 
@@ -284,7 +286,7 @@ export const PLANTILLA_POR_CATEGORIA: Record<
   { titulo: string; descripcion: string; imagen: string; kgComida: number; kgCO2: number }
 > = {
   'Pan del día': {
-    titulo: 'Bolsa de pan del día',
+    titulo: 'Pan y masitas del día',
     descripcion: 'Pan y masitas horneadas hoy que quedaron al cierre.',
     imagen: '/img/espiga.jpg',
     kgComida: 1.2,
@@ -298,7 +300,7 @@ export const PLANTILLA_POR_CATEGORIA: Record<
     kgCO2: 2.4,
   },
   Repostería: {
-    titulo: 'Bolsa de repostería',
+    titulo: 'Repostería y masas dulces del día',
     descripcion: 'Repostería y masas dulces del día para llevar.',
     imagen: '/img/cafe.jpg',
     kgComida: 0.6,
@@ -319,3 +321,22 @@ export const PLANTILLA_POR_CATEGORIA: Record<
     kgCO2: 3.6,
   },
 }
+
+/**
+ * Lo que reemplaza a la descripción cuando la bolsa es sorpresa. El comercio,
+ * la categoría, el precio, el horario y la distancia se siguen viendo: lo
+ * único que se reserva es el contenido.
+ */
+export const TEXTO_SORPRESA =
+  'Contenido sorpresa. Sabés el comercio y la categoría; lo que va adentro lo descubrís al recoger.'
+
+/** Fotos con las que el vendedor puede ilustrar lo que publica. */
+export const FOTOS_DISPONIBLES: { src: string; etiqueta: string }[] = [
+  { src: '/img/espiga.jpg', etiqueta: 'Pan y masitas' },
+  { src: '/img/mary.jpg', etiqueta: 'Almuerzo casero' },
+  { src: '/img/horno.jpg', etiqueta: 'Salteñas y horneados' },
+  { src: '/img/cafe.jpg', etiqueta: 'Café y repostería' },
+  { src: '/img/heladeria.jpg', etiqueta: 'Helados y postres' },
+  { src: '/img/mercado.jpg', etiqueta: 'Frutas y verduras' },
+  { src: '/img/restaurante.jpg', etiqueta: 'Platos preparados' },
+]

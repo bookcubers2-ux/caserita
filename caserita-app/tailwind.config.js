@@ -3,32 +3,38 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      // Paleta oficial de Caserita (identidad visual, agosto 2026). Los mismos
+      // valores que el deck del pitch: la app y la presentación no pueden
+      // verse como dos productos distintos.
       colors: {
-        brand: 'oklch(52.3% 0.135 144.2 / <alpha-value>)',
-        'brand-dark': 'oklch(42.5% 0.116 144.3 / <alpha-value>)',
-        'brand-soft': 'oklch(95.7% 0.021 147.6 / <alpha-value>)',
-        ink: 'oklch(27.8% 0.03 256.8 / <alpha-value>)',
-        ubicacion: 'oklch(54.6% 0.215 262.9 / <alpha-value>)',
-        ambar: 'oklch(76.1% 0.117 70.9 / <alpha-value>)',
-        'ambar-soft': 'oklch(96.2% 0.038 84 / <alpha-value>)',
-        'ambar-ink': 'oklch(48% 0.095 68 / <alpha-value>)',
-        destructive: 'oklch(57.7% 0.245 27.325 / <alpha-value>)',
-        tan: 'oklch(73.7% 0.086 76.5 / <alpha-value>)',
-        terracota: 'oklch(70.9% 0.112 50.5 / <alpha-value>)',
-        surface: 'oklch(96.9% 0.003 128.5 / <alpha-value>)',
-        background: 'oklch(100% 0 0 / <alpha-value>)',
-        card: 'oklch(100% 0 0 / <alpha-value>)',
-        'primary-foreground': 'oklch(100% 0 0 / <alpha-value>)',
-        'muted-foreground': 'oklch(55.1% 0.023 264.4 / <alpha-value>)',
-        border: 'oklch(92.8% 0.006 264.5 / <alpha-value>)',
+        brand: '#167A3C', // Verde Casera: marca, botones, precio final
+        'brand-dark': '#0E5A2B', // Verde oscuro: hover, sombras, fondos profundos
+        'brand-soft': '#E4F3E8', // Verde claro: tarjetas de impacto
+        naranja: '#F26522', // Naranja Remate: descuento y cifras clave
+        'naranja-soft': '#FFE9DC',
+        ink: '#17201A', // Carbón: titulares y texto
+        'muted-foreground': '#5C6660', // Gris texto
+        ubicacion: '#1B5FD1', // Azul Carrito: ubicación, íconos de pago
+        ambar: '#FFC53D', // Amarillo Aguayo
+        'ambar-soft': '#FFF3D6',
+        'ambar-ink': '#8C5A1E',
+        rosa: '#E5397A', // Solo en la franja aguayo
+        destructive: '#D93A2B',
+        background: '#FFF7EA', // Crema Marraqueta: nunca blanco puro
+        surface: '#F7EEDD', // Crema un punto más profundo, para rellenos suaves
+        card: '#FFFFFF',
+        'primary-foreground': '#FFF7EA',
+        border: '#E8E1D3',
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       boxShadow: {
-        card: '0 1px 2px 0 oklch(0.278 0.03 256.8 / 0.06), 0 8px 24px 0 oklch(0.278 0.03 256.8 / 0.06)',
-        lift: '0 10px 24px -8px oklch(0.278 0.03 256.8 / 0.30)',
+        // Sombras en carbón (#17201A), no en azul: sobre crema, una sombra fría
+        // ensucia el papel.
+        card: '0 1px 2px 0 rgb(23 32 26 / 0.06), 0 8px 24px 0 rgb(23 32 26 / 0.06)',
+        lift: '0 10px 24px -8px rgb(23 32 26 / 0.30)',
       },
       keyframes: {
         rise: {

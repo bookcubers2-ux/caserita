@@ -257,9 +257,9 @@ function CapaUsuario({
           center={posicion}
           radius={precision}
           pathOptions={{
-            color: 'oklch(54.6% .215 262.9)',
+            color: '#1B5FD1',
             weight: 1,
-            fillColor: 'oklch(54.6% .215 262.9)',
+            fillColor: '#1B5FD1',
             fillOpacity: 0.12,
           }}
           interactive={false}
@@ -383,7 +383,7 @@ export default function MapaReal({
           <Polyline
             positions={[destino, miPosicion]}
             pathOptions={{
-              color: 'oklch(42.5% .116 144.3)',
+              color: '#0E5A2B',
               weight: 5,
               dashArray: '1 10',
               lineCap: 'round',

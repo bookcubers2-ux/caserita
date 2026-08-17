@@ -6,6 +6,7 @@ import { useStore } from '../store'
 import { useTitulo } from '../lib/useTitulo'
 import { CATEGORIAS } from '../data/seed'
 import BolsaCard from '../components/BolsaCard'
+import Logotipo from '../components/Logotipo'
 import { Chip, Skeleton } from '../components/ui'
 
 export default function Home() {
@@ -14,8 +15,8 @@ export default function Home() {
   const [categoria, setCategoria] = useState<Categoria | 'Todo'>('Todo')
 
   useTitulo(
-    'Caserita · Bolsas sorpresa cerca de ti en Santa Cruz',
-    'Descubre bolsas sorpresa de comida rescatada cerca de ti en Santa Cruz, desde Bs 7.',
+    'Caserita · Comida del día a mitad de precio en Santa Cruz',
+    'Comida en buen estado a mitad de precio cerca de ti en Santa Cruz. Mirá qué es, reservá y recogé. Desde Bs 7.',
   )
 
   const bolsas = cargando ? null : todas
@@ -40,8 +41,8 @@ export default function Home() {
         {/* Cabecera de telefono: en escritorio la reemplaza la barra lateral. */}
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 lg:hidden">
           <div className="min-w-0">
-            <h1 className="truncate text-2xl font-extrabold tracking-tight text-brand-dark">
-              Caserita
+            <h1 className="truncate text-2xl">
+              <Logotipo className="text-brand" />
             </h1>
             <p className="inline-flex items-center gap-1 text-sm text-muted-foreground">
               <MapPin className="size-4 text-ubicacion" aria-hidden /> Santa Cruz
@@ -58,7 +59,7 @@ export default function Home() {
         {/* Titulo de escritorio. */}
         <div className="hidden lg:block">
           <h1 className="text-3xl font-extrabold tracking-tight text-ink">
-            Bolsas sorpresa cerca de ti
+            Comida del día cerca de ti
           </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
             Comida en buen estado que hoy se iba a botar, a mitad de precio en Santa Cruz.
@@ -94,7 +95,7 @@ export default function Home() {
 
       <div className="space-y-3 px-4 pt-2 lg:space-y-0 lg:px-0 lg:pt-7">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 className="text-base font-bold text-ink lg:hidden">Bolsas sorpresa cerca de ti</h2>
+          <h2 className="text-base font-bold text-ink lg:hidden">Comida del día cerca de ti</h2>
           {visibles && (
             <p className="hidden text-sm text-muted-foreground lg:block">
               {visibles.length} {visibles.length === 1 ? 'bolsa disponible' : 'bolsas disponibles'}

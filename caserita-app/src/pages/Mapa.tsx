@@ -59,7 +59,7 @@ export default function Mapa() {
 
   useTitulo(
     'Mapa de bolsas en Santa Cruz · Caserita',
-    'Mira en el mapa las bolsas sorpresa disponibles cerca de ti en Santa Cruz.',
+    'Mirá en el mapa la comida disponible cerca de ti en Santa Cruz.',
   )
 
   const seleccionadaId = elegidaId ?? bolsas[0]?.id

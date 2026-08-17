@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { HandCoins, ShoppingBasket, Store } from 'lucide-react'
 import { useStore } from '../store'
 import { useTitulo } from '../lib/useTitulo'
+import Logotipo from '../components/Logotipo'
 import { Button, GhostButton } from '../components/ui'
 
 const PASOS = [
@@ -15,7 +16,8 @@ const PASOS = [
   {
     Icon: HandCoins,
     titulo: 'A mitad de precio',
-    texto: 'Bolsas sorpresa desde Bs 7. Pagas al recoger, en efectivo o con QR Simple.',
+    texto:
+      'Comida del día desde Bs 7. Ves qué es antes de reservar y pagás al recoger, en efectivo o con QR Simple.',
   },
   {
     Icon: Store,
@@ -43,7 +45,15 @@ export default function Onboarding() {
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-6 pb-10 pt-16 shadow-card lg:max-w-xl lg:justify-center lg:px-14">
-      <p className="text-sm font-bold uppercase tracking-widest text-brand">Caserita</p>
+      {/* Franja aguayo de la identidad: verde · naranja · amarillo · rosa. */}
+      <div className="mb-6 flex h-1.5 overflow-hidden rounded-full" aria-hidden>
+        <span className="flex-1 bg-brand" />
+        <span className="flex-1 bg-naranja" />
+        <span className="flex-1 bg-ambar" />
+        <span className="flex-1 bg-rosa" />
+      </div>
+
+      <Logotipo className="text-2xl text-brand" />
 
       <div key={i} className="animate-rise mt-10 flex-1">
         <div className="grid size-20 place-items-center rounded-3xl bg-brand-soft text-brand-dark">
@@ -71,6 +81,10 @@ export default function Onboarding() {
             Saltar
           </GhostButton>
         )}
+        {/* La frase de marca, igual que en el cierre del pitch. */}
+        <p className="pt-2 text-center text-xs font-semibold text-muted-foreground">
+          La comida que hoy se bota, mañana es un mercado.
+        </p>
       </div>
     </div>
   )

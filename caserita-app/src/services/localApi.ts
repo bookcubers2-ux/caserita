@@ -49,6 +49,7 @@ interface BolsaInterna {
   imagen: string
   kgComida: number
   kgCO2: number
+  sorpresa?: boolean
   creadaEn: number
 }
 
@@ -64,6 +65,10 @@ interface PublicacionInterna {
   precio: number
   horario: string
   vendidas: number
+  titulo?: string
+  descripcion?: string
+  imagen?: string
+  sorpresa?: boolean
   creadaEn: number
 }
 
@@ -84,7 +89,9 @@ interface Estado {
   secuencia: number
 }
 
-const CLAVE = 'caserita:estado:v1'
+// La versión sube cuando cambia el catálogo semilla: si no, quien ya abrió la
+// app seguiría viendo el catálogo viejo guardado en su navegador.
+const CLAVE = 'caserita:estado:v2'
 
 /** Deja el estado como recién instalado, a partir del catálogo semilla. */
 function estadoInicial(): Estado {
@@ -102,16 +109,41 @@ function estadoInicial(): Estado {
     imagen: b.imagen,
     kgComida: b.kgComida,
     kgCO2: b.kgCO2,
+    sorpresa: b.sorpresa,
     creadaEn: 0,
   }))
 
   const reservas: ReservaInterna[] = RESERVAS_SEED.map((r) => ({ ...r, creadaEn: 0 }))
 
   // El estado de una publicación se DERIVA del stock real de su bolsa; por eso
-  // guardamos el vínculo bolsaId, igual que el backend.
+  // guardamos el vínculo bolsaId, igual que el backend. Lo que describe al
+  // producto también sale de la bolsa: las dos pantallas no pueden discrepar.
+  const publicacionSemilla = (
+    id: string,
+    bolsaId: string,
+    cantidad: number,
+    vendidas: number,
+  ): PublicacionInterna => {
+    const b = bolsas.find((x) => x.id === bolsaId)!
+    return {
+      id,
+      bolsaId,
+      categoria: b.categoria,
+      cantidad,
+      precio: b.precioNuevo,
+      horario: `${b.recojoInicio}-${b.recojoFin}`,
+      vendidas,
+      titulo: b.titulo,
+      descripcion: b.descripcion,
+      imagen: b.imagen,
+      sorpresa: b.sorpresa,
+      creadaEn: 0,
+    }
+  }
+
   const publicaciones: PublicacionInterna[] = [
-    { id: 'p1', bolsaId: 'b1', categoria: 'Pan del día', cantidad: 7, precio: 12, horario: '18:00-19:00', vendidas: 3, creadaEn: 0 },
-    { id: 'p2', bolsaId: 'b4', categoria: 'Repostería', cantidad: 4, precio: 9, horario: '19:00-20:00', vendidas: 2, creadaEn: 0 },
+    publicacionSemilla('p1', 'b1', 7, 3),
+    publicacionSemilla('p2', 'b4', 4, 2),
   ]
 
   return {
@@ -186,6 +218,7 @@ function armarBolsa(b: BolsaInterna): BolsaConVendedor {
     imagen: b.imagen,
     kgComida: b.kgComida,
     kgCO2: b.kgCO2,
+    sorpresa: b.sorpresa,
     distanciaKm: distanciaKm(UBICACION_USUARIO, [vendedor.lat, vendedor.lng]),
     vendedor,
   }
@@ -339,6 +372,10 @@ export async function getPublicaciones(): Promise<Publicacion[]> {
         precio: p.precio,
         horario: p.horario,
         vendidas: p.vendidas,
+        titulo: p.titulo,
+        descripcion: p.descripcion,
+        imagen: p.imagen,
+        sorpresa: p.sorpresa,
         estado: disponibles > 0 ? 'activa' : 'agotada',
       }
     })
@@ -348,7 +385,7 @@ export async function getPublicaciones(): Promise<Publicacion[]> {
 export async function crearPublicacion(
   datos: Omit<Publicacion, 'id' | 'vendidas' | 'estado'>,
 ): Promise<Publicacion> {
-  const { categoria, cantidad, precio, horario } = datos
+  const { categoria, cantidad, precio, horario, titulo, descripcion, imagen, sorpresa } = datos
   const plantilla = PLANTILLA_POR_CATEGORIA[categoria as Categoria]
   if (!plantilla) throw new ErrorApi('Categoría desconocida', 400)
   if (!Number.isFinite(cantidad) || cantidad < 1) throw new ErrorApi('Cantidad inválida', 400)
@@ -359,20 +396,27 @@ export async function crearPublicacion(
   const bolsaId = `b-${marca}`
   const seq = estado.secuencia++
 
+  // Lo que escribió el vendedor manda; la plantilla solo cubre lo que dejó en
+  // blanco (y en una sorpresa la descripción se queda vacía a propósito).
+  const tituloFinal = titulo?.trim() || plantilla.titulo
+  const descripcionFinal = sorpresa ? '' : descripcion?.trim() || plantilla.descripcion
+  const imagenFinal = imagen?.trim() || plantilla.imagen
+
   estado.bolsas.push({
     id: bolsaId,
     vendedorId: 'v-mio',
-    titulo: plantilla.titulo,
-    descripcion: plantilla.descripcion,
+    titulo: tituloFinal,
+    descripcion: descripcionFinal,
     categoria: categoria as Categoria,
     precioViejo: Math.round(precio * 2.6),
     precioNuevo: precio,
     recojoInicio: inicio ?? '18:00',
     recojoFin: fin ?? '19:00',
     disponibles: cantidad,
-    imagen: plantilla.imagen,
+    imagen: imagenFinal,
     kgComida: plantilla.kgComida,
     kgCO2: plantilla.kgCO2,
+    sorpresa: sorpresa || undefined,
     creadaEn: seq,
   })
 
@@ -384,6 +428,10 @@ export async function crearPublicacion(
     precio,
     horario: `${inicio}-${fin ?? ''}`.replace(/-$/, ''),
     vendidas: 0,
+    titulo: tituloFinal,
+    descripcion: descripcionFinal,
+    imagen: imagenFinal,
+    sorpresa: sorpresa || undefined,
     creadaEn: seq,
   }
   estado.publicaciones.push(pub)
@@ -396,6 +444,10 @@ export async function crearPublicacion(
     precio: pub.precio,
     horario: pub.horario,
     vendidas: 0,
+    titulo: pub.titulo,
+    descripcion: pub.descripcion,
+    imagen: pub.imagen,
+    sorpresa: pub.sorpresa,
     estado: 'activa',
   }
 }

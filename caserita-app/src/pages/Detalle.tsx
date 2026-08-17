@@ -5,9 +5,10 @@ import type { MetodoPago } from '../types'
 import { useStore } from '../store'
 import { useTitulo } from '../lib/useTitulo'
 import { ventanaDeRecojo } from '../lib/horarios'
+import { TEXTO_SORPRESA } from '../data/seed'
 import Foto from '../components/Foto'
 import { descuento } from '../components/BolsaCard'
-import { BackButton, Button, Rating, Skeleton } from '../components/ui'
+import { BackButton, Button, EtiquetaSorpresa, Rating, Skeleton } from '../components/ui'
 import NoEncontrado from './NoEncontrado'
 
 export default function Detalle() {
@@ -25,7 +26,8 @@ export default function Detalle() {
       : cargando
         ? 'Cargando bolsa · Caserita'
         : 'Página no encontrada · Caserita',
-    bolsa?.descripcion,
+    // Con una bolsa sorpresa el contenido tampoco se filtra por la meta.
+    bolsa?.sorpresa ? TEXTO_SORPRESA : bolsa?.descripcion,
   )
 
   if (cargando) {
@@ -78,7 +80,7 @@ export default function Detalle() {
           <div className="absolute left-3 top-4 lg:hidden">
             <BackButton to="/" />
           </div>
-          <span className="absolute right-3 top-4 rounded-full bg-brand px-3 py-1.5 text-sm font-extrabold text-primary-foreground lg:right-4">
+          <span className="absolute right-3 top-4 rounded-full bg-naranja px-3 py-1.5 text-sm font-extrabold text-ink lg:right-4">
             -{descuento(bolsa)}%
           </span>
           <span
@@ -104,8 +106,13 @@ export default function Detalle() {
           </div>
 
           <div>
-            <h2 className="text-base font-bold text-ink lg:text-lg">{bolsa.titulo}</h2>
-            <p className="mt-1 text-sm text-muted-foreground lg:text-base">{bolsa.descripcion}</p>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-base font-bold text-ink lg:text-lg">{bolsa.titulo}</h2>
+              {bolsa.sorpresa && <EtiquetaSorpresa />}
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground lg:text-base">
+              {bolsa.sorpresa ? TEXTO_SORPRESA : bolsa.descripcion}
+            </p>
           </div>
 
           <div className="flex items-baseline gap-2">

@@ -12,14 +12,14 @@ export default defineConfig({
         name: 'Caserita · Comida rescatada en Santa Cruz',
         short_name: 'Caserita',
         description:
-          'Rescata bolsas sorpresa de comida en buen estado a mitad de precio en Santa Cruz de la Sierra.',
+          'Rescatá comida en buen estado a mitad de precio en Santa Cruz de la Sierra. Ves qué comprás antes de reservar.',
         lang: 'es-BO',
         start_url: '/',
         scope: '/',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#f4f5f3',
-        theme_color: '#2f7d3a',
+        background_color: '#FFF7EA',
+        theme_color: '#167A3C',
         categories: ['food', 'shopping', 'lifestyle'],
         icons: [
           { src: '/pwa-192.png', sizes: '192x192', type: 'image/png' },
