@@ -53,7 +53,7 @@ export default function Onboarding() {
         <span className="flex-1 bg-rosa" />
       </div>
 
-      <Logotipo className="text-2xl text-brand" />
+      <Logotipo conSimbolo className="text-3xl text-brand" claseSimbolo="h-[1.3em] w-auto" />
 
       <div key={i} className="animate-rise mt-10 flex-1">
         <div className="grid size-20 place-items-center rounded-3xl bg-brand-soft text-brand-dark">

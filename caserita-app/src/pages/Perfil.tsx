@@ -107,7 +107,7 @@ export default function Perfil() {
 
           {/* Firma de marca, la misma frase con la que cierra el pitch. */}
           <div className="pt-2 text-center">
-            <Logotipo className="text-lg text-brand" />
+            <Logotipo conSimbolo className="text-lg text-brand" />
             <p className="mt-1 text-xs font-semibold text-muted-foreground">
               La comida que hoy se bota, mañana es un mercado.
             </p>

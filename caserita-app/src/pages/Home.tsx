@@ -42,7 +42,7 @@ export default function Home() {
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 lg:hidden">
           <div className="min-w-0">
             <h1 className="truncate text-2xl">
-              <Logotipo className="text-brand" />
+              <Logotipo conSimbolo className="text-brand" />
             </h1>
             <p className="inline-flex items-center gap-1 text-sm text-muted-foreground">
               <MapPin className="size-4 text-ubicacion" aria-hidden /> Santa Cruz

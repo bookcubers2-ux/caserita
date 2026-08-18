@@ -20,7 +20,7 @@ export default function Sidebar() {
     // es sticky y no acompaña el scroll de la página.
     <aside className="hidden lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-[264px] lg:shrink-0 lg:flex-col lg:overflow-y-auto lg:border-r lg:border-border lg:bg-card lg:px-5 lg:py-7">
       <Link to="/" className="block">
-        <Logotipo className="text-2xl text-brand" />
+        <Logotipo conSimbolo className="text-2xl text-brand" />
         <p className="mt-0.5 inline-flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin className="size-4 text-ubicacion" aria-hidden /> Santa Cruz
         </p>
