@@ -91,7 +91,7 @@ interface Estado {
 
 // La versión sube cuando cambia el catálogo semilla: si no, quien ya abrió la
 // app seguiría viendo el catálogo viejo guardado en su navegador.
-const CLAVE = 'caserita:estado:v3'
+const CLAVE = 'caserita:estado:v4'
 
 /** Deja el estado como recién instalado, a partir del catálogo semilla. */
 function estadoInicial(): Estado {

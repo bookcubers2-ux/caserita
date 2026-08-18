@@ -22,8 +22,8 @@ export const UBICACION_USUARIO: [number, number] = [-17.7802, -63.183]
 export const VENDEDORES: Vendedor[] = [
   {
     id: 'v1',
-    nombre: 'Panadería La Espiga',
-    tipo: 'Panadería',
+    nombre: 'Pan de Doña Lidia',
+    tipo: 'Puesto de pan',
     direccion: 'Av. Cañoto esq. Sucre',
     rating: 4.8,
     lat: -17.7869,
@@ -41,7 +41,7 @@ export const VENDEDORES: Vendedor[] = [
   {
     id: 'v3',
     nombre: 'Salteñas Doña Fela',
-    tipo: 'Salteñería',
+    tipo: 'Carrito',
     direccion: '2do anillo, Av. Alemana',
     rating: 4.9,
     lat: -17.7729,
@@ -59,7 +59,7 @@ export const VENDEDORES: Vendedor[] = [
   {
     id: 'v5',
     nombre: 'Tucumanas El Fogón',
-    tipo: 'Puesto',
+    tipo: 'Puesto de la esquina',
     direccion: '3er anillo interno, Av. Banzer',
     rating: 4.5,
     lat: -17.7563,
@@ -156,8 +156,8 @@ export const BOLSAS: Bolsa[] = [
   {
     id: 'b4',
     vendedorId: 'v4',
-    titulo: 'Api con pastel de queso',
-    descripcion: 'Api morado calentito y pastel de queso frito, espolvoreado con azúcar.',
+    titulo: 'Api con buñuelo recién frito',
+    descripcion: 'Api morado calentito y buñuelo de la olla, bañado en miel.',
     categoria: 'Repostería',
     precioViejo: 12,
     precioNuevo: 5,
@@ -358,7 +358,7 @@ export const PLANTILLA_POR_CATEGORIA: Record<
   Repostería: {
     titulo: 'Masitas y postres del día',
     descripcion: 'Masitas y frituras dulces de la última tanda.',
-    imagen: '/img/humintas.jpg',
+    imagen: '/img/masitas.jpg',
     kgComida: 0.6,
     kgCO2: 1.5,
   },
@@ -393,7 +393,9 @@ export const FOTOS_DISPONIBLES: { src: string; etiqueta: string }[] = [
   { src: '/img/saltenas.jpg', etiqueta: 'Salteñas y empanadas' },
   { src: '/img/tucumanas.jpg', etiqueta: 'Tucumanas' },
   { src: '/img/api.jpg', etiqueta: 'Api con pastel' },
-  { src: '/img/humintas.jpg', etiqueta: 'Humintas y masitas' },
+  { src: '/img/masitas.jpg', etiqueta: 'Masitas del puesto' },
+  { src: '/img/carrito.jpg', etiqueta: 'Mi carrito' },
+  { src: '/img/feria.jpg', etiqueta: 'Puesto en la feria' },
   { src: '/img/salchipapa.jpg', etiqueta: 'Salchipapa' },
   { src: '/img/chola.jpg', etiqueta: 'Sándwich de chola' },
   { src: '/img/verduras.jpg', etiqueta: 'Frutas y verduras' },
