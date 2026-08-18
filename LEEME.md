@@ -120,3 +120,14 @@ cambio: se reemplazan `construirPayload` y `confirmarPago` en
 `caserita-app/src/services/pago.ts` y el resto del flujo queda igual.
 
 Tampoco hay login: todas las peticiones son del mismo usuario (`u1`).
+
+## Fotos del catálogo
+
+Las fotos de comida vienen de Wikimedia Commons, casi todas bajo CC BY-SA 4.0.
+Se recortaron a 800x600 y se recomprimieron; no se alteraron de otro modo. El
+detalle de obra, autor, licencia y enlace está en
+`caserita-app/public/CREDITOS-FOTOS.txt`, que la app sirve en
+`/CREDITOS-FOTOS.txt`.
+
+Si se reemplaza una foto hay que actualizar ese archivo: la licencia obliga a
+citar autor y licencia, y a compartir las obras derivadas igual.

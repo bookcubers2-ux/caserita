@@ -1,0 +1,68 @@
+Créditos de las fotos de Caserita
+==================================
+
+Las fotos del catálogo son de Wikimedia Commons. Salvo indicación contraria
+están bajo CC BY-SA 4.0: se pueden reusar citando autor y licencia, y las
+obras derivadas se comparten con la misma licencia.
+
+Aquí se recortaron a 800x600 y se recomprimieron; por lo demás no se alteraron.
+
+pan.jpg
+    obra   : Pan sarnita boliviano.jpg
+    autor  : Carlillasa
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Pan_sarnita_boliviano.jpg
+
+almuerzo.jpg
+    obra   : Silpancho Cochabambino.jpg
+    autor  : Alexander Vaca Rivas
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Silpancho_Cochabambino.jpg
+
+saltenas.jpg
+    obra   : 1 EMPANADAS picantes.jpg
+    autor  : Rumor de tu selva
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:1_EMPANADAS_picantes.jpg
+
+tucumanas.jpg
+    obra   : Puesto de tucumanas.jpg
+    autor  : Das Morton
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Puesto_de_tucumanas.jpg
+
+api.jpg
+    obra   : Api con pastel.jpg
+    autor  : Caleidoscopic
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Api_con_pastel.jpg
+
+humintas.jpg
+    obra   : Humitas (1).jpg
+    autor  : JordiCuber
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Humitas_(1).jpg
+
+salchipapa.jpg
+    obra   : Plato de Salchipapa.jpg
+    autor  : Chofaska
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Plato_de_Salchipapa.jpg
+
+chola.jpg
+    obra   : Sandwich de chola sencilla de la feria 16 de julio (cropped).jpg
+    autor  : NatalyAKM
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Sandwich_de_chola_sencilla_de_la_feria_16_de_julio_(cropped).jpg
+
+verduras.jpg
+    obra   : Verduras mercado.jpg
+    autor  : Saray Vargas 1312
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Verduras_mercado.jpg
+
+puesto.jpg
+    obra   : Comedor popular del Mercado Rodriguez - La Paz, Bolivia.jpg
+    autor  : Das Morton
+    licencia: CC BY-SA 4.0
+    fuente : https://commons.wikimedia.org/wiki/File:Comedor_popular_del_Mercado_Rodriguez_-_La_Paz,_Bolivia.jpg
