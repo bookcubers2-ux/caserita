@@ -51,14 +51,18 @@ export default function BolsaCard({ bolsa }: { bolsa: BolsaConVendedor }) {
         </p>
         <div className="flex items-end justify-between gap-3 pt-1">
           <div className="flex items-baseline gap-2">
-            <span className="text-sm text-muted-foreground line-through">Bs {bolsa.precioViejo}</span>
-            <span className="text-lg font-extrabold text-brand">Bs {bolsa.precioNuevo}</span>
+            <span className="whitespace-nowrap text-sm text-muted-foreground line-through">
+              Bs {bolsa.precioViejo}
+            </span>
+            <span className="whitespace-nowrap text-lg font-extrabold text-brand">
+              Bs {bolsa.precioNuevo}
+            </span>
           </div>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1">
               <Clock className="size-4" aria-hidden /> {ventana.etiqueta}
             </span>
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1 whitespace-nowrap">
               <MapPin className="size-4" aria-hidden /> {bolsa.distanciaKm} km
             </span>
           </div>
