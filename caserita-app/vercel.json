@@ -3,5 +3,13 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "caserita-bookcubers2-uxs-projects.vercel.app" }],
+      "destination": "https://www.caserita.shop/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
