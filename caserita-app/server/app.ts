@@ -604,7 +604,8 @@ export async function manejar(p: Peticion): Promise<Respuesta> {
   } catch (e) {
     if (e instanceof ErrorHttp) return { status: e.status, cuerpo: { error: e.message } }
     console.error('[api]', e)
-    return { status: 500, cuerpo: { error: 'Algo salió mal en el servidor de Caserita' } }
+    const detalle = e instanceof Error ? e.message.slice(0, 300) : String(e)
+    return { status: 500, cuerpo: { error: 'Algo salió mal en el servidor de Caserita', detalle } }
   }
 }
 
@@ -615,8 +616,18 @@ async function enrutar(p: Peticion): Promise<Respuesta> {
   const origen = origenDe(p)
 
   if (a === 'salud' && m === 'GET') {
-    const f = await uno<{ n: number | string }>('SELECT COUNT(*) AS n FROM bolsas')
-    return ok({ ok: true, bolsas: Number(f?.n ?? 0), telegram: tg.telegramConfigurado(), db: process.env.DATABASE_URL ? 'neon' : 'pglite' })
+    const base = {
+      telegram: tg.telegramConfigurado(),
+      db: process.env.DATABASE_URL ? 'neon' : process.env.VERCEL ? 'FALTA DATABASE_URL' : 'pglite',
+      secreto: Boolean(process.env.CASERITA_SECRETO),
+      webhookSecret: Boolean(process.env.TELEGRAM_WEBHOOK_SECRET),
+    }
+    try {
+      const f = await uno<{ n: number | string }>('SELECT COUNT(*) AS n FROM bolsas')
+      return ok({ ok: true, bolsas: Number(f?.n ?? 0), ...base })
+    } catch (e) {
+      return { status: 503, cuerpo: { ok: false, ...base, error: (e as Error).message } }
+    }
   }
 
   if (a === 'bolsas' && m === 'GET') {

@@ -23,6 +23,7 @@ async function crearConsulta(): Promise<Consulta> {
     const sql = neon(url)
     return async (texto, params = []) => (await sql.query(texto, params)) as Fila[]
   }
+  if (process.env.VERCEL) throw new Error('Falta configurar la base de datos: DATABASE_URL no está definida en Vercel (Storage → Create Database → Neon → Connect Project)')
   const { PGlite } = await import('@electric-sql/pglite')
   // En Vercel el disco es de solo lectura: sin DATABASE_URL se usa memoria (solo para probar).
   const ruta = process.env.CASERITA_PGLITE ?? (process.env.VERCEL ? 'memory' : './.data/caserita')
@@ -35,7 +36,11 @@ export async function q<T extends Fila = Fila>(sql: string, params: unknown[] = 
   if (!consulta) consulta = await crearConsulta()
   if (!listo) {
     const { prepararEsquema } = await import('./esquema')
-    listo = prepararEsquema(consulta)
+    listo = prepararEsquema(consulta).catch((e) => {
+      listo = null
+      consulta = null
+      throw e
+    })
   }
   await listo
   return (await consulta(sql, params)) as T[]

@@ -8,6 +8,17 @@ import { manejar } from '../server/app'
 export const config = { maxDuration: 20 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  try {
+    return await atender(req, res)
+  } catch (e) {
+    // Nunca dejar que la función muera sin decir por qué: el error llega como JSON.
+    console.error('[api] fallo no controlado', e)
+    res.setHeader('Cache-Control', 'no-store')
+    return res.status(500).json({ error: 'La API de Caserita falló al arrancar', detalle: e instanceof Error ? e.message.slice(0, 300) : String(e) })
+  }
+}
+
+async function atender(req: VercelRequest, res: VercelResponse) {
   const url = new URL(req.url ?? '/', 'http://caserita')
   const ruta = url.pathname.replace(/^\/api/, '') || '/'
   const r = await manejar({
