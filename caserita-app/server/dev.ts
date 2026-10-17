@@ -3,7 +3,7 @@
  * La app en modo dev lo usa cuando se arranca con VITE_API_URL=http://localhost:3001.
  */
 import { createServer } from 'node:http'
-import { manejar } from './app'
+import { manejar } from './app.js'
 
 const PUERTO = Number(process.env.PORT ?? 3001)
 

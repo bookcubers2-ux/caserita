@@ -35,7 +35,7 @@ async function crearConsulta(): Promise<Consulta> {
 export async function q<T extends Fila = Fila>(sql: string, params: unknown[] = []): Promise<T[]> {
   if (!consulta) consulta = await crearConsulta()
   if (!listo) {
-    const { prepararEsquema } = await import('./esquema')
+    const { prepararEsquema } = await import('./esquema.js')
     listo = prepararEsquema(consulta).catch((e) => {
       listo = null
       consulta = null

@@ -12,9 +12,9 @@
  *   6. el vecino califica a la casera.
  */
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto'
-import { q, uno, type Fila } from './db'
-import { PLANTILLA_POR_CATEGORIA, UBICACION_USUARIO } from '../src/data/seed'
-import * as tg from './telegram'
+import { q, uno, type Fila } from './db.js'
+import { PLANTILLA_POR_CATEGORIA, UBICACION_USUARIO } from '../src/data/seed.js'
+import * as tg from './telegram.js'
 
 // ------------------------------------------------------------------ tipos
 
@@ -591,7 +591,7 @@ async function reiniciar(): Promise<Respuesta> {
   await q('DELETE FROM bolsas')
   await q('DELETE FROM clientes')
   await q('DELETE FROM vendedores')
-  const { prepararEsquema } = await import('./esquema')
+  const { prepararEsquema } = await import('./esquema.js')
   await prepararEsquema(q)
   return ok({ ok: true })
 }

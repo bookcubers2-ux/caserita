@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { manejar } from '../server/app'
+import { manejar } from '../server/app.js'
 
 /**
  * Única función de Vercel: recibe todo /api/* (ver vercel.json) y se lo pasa

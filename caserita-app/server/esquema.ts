@@ -1,5 +1,5 @@
-import type { Fila } from './db'
-import { BOLSAS, VENDEDORES } from '../src/data/seed'
+import type { Fila } from './db.js'
+import { BOLSAS, VENDEDORES } from '../src/data/seed.js'
 
 type Consulta = (sql: string, params?: unknown[]) => Promise<Fila[]>
 
