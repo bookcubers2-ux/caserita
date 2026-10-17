@@ -66,8 +66,19 @@ async function atender(req: VercelRequest, res: VercelResponse) {
       trozos.push({ tipo: 'error', hex: String(e) })
     }
     const b = req.body
+    const decodificado = trozos.length && trozos[0].tipo !== 'error' ? JSON.parse(Buffer.from(trozos.map((t) => t.hex).join(''), 'hex').toString('utf8')) : null
+    let db: unknown = null
+    if (url.searchParams.get('db') && decodificado && typeof (decodificado as { nombre?: unknown }).nombre === 'string') {
+      const { q } = await import('../server/db.js')
+      const nombre = (decodificado as { nombre: string }).nombre
+      await q(`INSERT INTO clientes (id, nombre, telefono, creado_en) VALUES ('eco', $1, '', $2) ON CONFLICT (id) DO UPDATE SET nombre = $1`, [nombre, Date.now()])
+      const f = await q<{ nombre: string }>(`SELECT nombre, length(nombre) AS n, encode(convert_to(nombre, 'UTF8'), 'hex') AS hx FROM clientes WHERE id = 'eco'`)
+      db = { enviado: nombre, enviadoHex: Buffer.from(nombre).toString('hex'), leido: f[0] }
+    }
     const info = {
       trozos,
+      decodificado,
+      db,
       bodyTipo: Buffer.isBuffer(b) ? 'buffer' : typeof b,
       bodyHex: Buffer.isBuffer(b) ? b.toString('hex').slice(0, 60) : typeof b === 'string' ? Buffer.from(b).toString('hex').slice(0, 60) : JSON.stringify(b)?.slice(0, 60),
       encabezado: req.headers['content-type'],
