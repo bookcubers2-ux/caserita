@@ -6,10 +6,29 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "caserita-bookcubers2-uxs-projects.vercel.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "caserita-bookcubers2-uxs-projects.vercel.app"
+        }
+      ],
       "destination": "https://www.caserita.shop/:path*",
       "permanent": true
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "functions": {
+    "api/index.ts": {
+      "maxDuration": 20
+    }
+  }
 }

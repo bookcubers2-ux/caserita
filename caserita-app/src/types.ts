@@ -8,6 +8,8 @@ export interface Vendedor {
   tipo: string
   direccion: string
   rating: number
+  /** Cuántos vecinos ya calificaron a esta casera (0 = todavía usa el rating de arranque). */
+  opiniones?: number
   /** Coordenadas reales (aproximadas) dentro de Santa Cruz de la Sierra. */
   lat: number
   lng: number
@@ -36,17 +38,27 @@ export interface BolsaConVendedor extends Bolsa {
   vendedor: Vendedor
 }
 
-export type EstadoReserva = 'activa' | 'recogida'
+/**
+ * Vida de un pedido:
+ * activa    = reservado, todavía no lo recogió
+ * entregada = la casera (o el vecino) marcó que ya se entregó
+ * cancelada = el vecino lo canceló antes de recoger
+ */
+export type EstadoReserva = 'activa' | 'entregada' | 'cancelada'
 
 /**
- * Ciclo de vida del cobro:
- * pendiente  = aun no se genero o no se escaneo el QR
- * esperando  = QR en pantalla, esperando que el banco reporte el pago
- * procesando = el banco recibio la transaccion y la esta acreditando
- * pagado     = confirmado
- * expirado   = el QR vencio sin pago
+ * Vida del cobro:
+ * pendiente   = todavía no mandó el comprobante (o paga en efectivo al recoger)
+ * verificando = subió la captura; la estamos revisando en Telegram
+ * pagado      = aceptado
+ * rechazado   = la captura no sirvió; puede volver a subir otra o pagar al recoger
  */
-export type EstadoPago = 'pendiente' | 'esperando' | 'procesando' | 'pagado' | 'expirado'
+export type EstadoPago = 'pendiente' | 'verificando' | 'pagado' | 'rechazado'
+
+export interface Calificacion {
+  estrellas: number
+  comentario: string
+}
 
 export interface Reserva {
   id: string
@@ -54,26 +66,26 @@ export interface Reserva {
   codigo: string
   estado: EstadoReserva
   fecha: string
+  creadaEn?: number
   total: number
   metodoPago: MetodoPago
   estadoPago: EstadoPago
   referenciaPago?: string
+  nota?: string
+  calificacion?: Calificacion
+  /** Solo lo ve la casera en su panel. */
+  cliente?: { nombre: string; telefono: string }
 }
 
 export interface ReservaConBolsa extends Reserva {
   bolsa?: BolsaConVendedor
 }
 
-export type PasoDelivery = 'preparando' | 'en_camino' | 'entregado'
-
-export interface Delivery {
-  id: string
-  reservaId: string
-  paso: PasoDelivery
-  etaMin: number
-  costoDelivery: number
-  /** Momento en que se pidio, para que el seguimiento avance solo. */
-  creadoEn: number
+export interface Opinion {
+  estrellas: number
+  comentario: string
+  fecha: string
+  nombre: string
 }
 
 export interface Publicacion {
@@ -101,6 +113,11 @@ export interface Usuario {
   comidasEsteMes: number
   kgCO2Evitado: number
   bsAhorrados: number
+}
+
+export interface SesionVendedor {
+  token: string
+  vendedor: { id: string; nombre: string; tipo: string; direccion: string }
 }
 
 export type Rol = 'comprador' | 'vendedor'

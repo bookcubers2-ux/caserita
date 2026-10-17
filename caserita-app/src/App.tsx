@@ -14,7 +14,7 @@ import Pedidos from './pages/Pedidos'
 import Perfil from './pages/Perfil'
 import Vendedor from './pages/Vendedor'
 import VendedorHoy from './pages/VendedorHoy'
-import DeliveryPage from './pages/Delivery'
+import VendedorPedidos from './pages/VendedorPedidos'
 import NoEncontrado from './pages/NoEncontrado'
 
 /**
@@ -39,7 +39,8 @@ function GuardiaOnboarding({ children }: { children: React.ReactNode }) {
   const { vistoOnboarding } = useStore()
   const { pathname } = useLocation()
 
-  if (!vistoOnboarding && pathname !== '/onboarding') {
+  // La casera que entra directo a su panel no necesita el tour del comprador.
+  if (!vistoOnboarding && pathname !== '/onboarding' && !pathname.startsWith('/vendedor')) {
     return <Navigate to="/onboarding" replace />
   }
   return <>{children}</>
@@ -56,11 +57,7 @@ function AvisoSinServidor() {
       className="fixed inset-x-0 top-0 z-[800] mx-auto flex w-full max-w-md items-center gap-3 bg-ink px-4 py-2.5 text-xs font-semibold text-background lg:max-w-none"
     >
       <span className="min-w-0 flex-1">{errorRed}</span>
-      <button
-        type="button"
-        onClick={reintentar}
-        className="tap shrink-0 rounded-full bg-background/15 px-3 py-1 font-bold"
-      >
+      <button type="button" onClick={reintentar} className="tap shrink-0 rounded-full bg-background/15 px-3 py-1 font-bold">
         Reintentar
       </button>
     </div>
@@ -89,7 +86,8 @@ export default function App() {
             <Route path="/reserva/:id" element={<Reserva />} />
             <Route path="/vendedor" element={<Vendedor />} />
             <Route path="/vendedor/hoy" element={<VendedorHoy />} />
-            <Route path="/delivery/:id" element={<DeliveryPage />} />
+            <Route path="/vendedor/pedidos" element={<VendedorPedidos />} />
+            <Route path="/delivery/:id" element={<Navigate to="/pedidos" replace />} />
           </Route>
 
           <Route path="/onboarding" element={<Onboarding />} />

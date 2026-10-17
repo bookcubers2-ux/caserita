@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Banknote, Clock, Leaf, QrCode } from 'lucide-react'
-import type { MetodoPago } from '../types'
+import { ArrowLeft, Banknote, Clock, Leaf, Phone, QrCode, Star, UserRound } from 'lucide-react'
+import type { MetodoPago, Opinion } from '../types'
 import { useStore } from '../store'
+import { datosCliente } from '../lib/cliente'
+import { getOpiniones } from '../services/api'
 import { useTitulo } from '../lib/useTitulo'
 import { ventanaDeRecojo } from '../lib/horarios'
 import { TEXTO_SORPRESA } from '../data/seed'
@@ -14,11 +16,27 @@ import NoEncontrado from './NoEncontrado'
 export default function Detalle() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { bolsaPorId, reservar: crear, cargando } = useStore()
+  const { bolsaPorId, reservar: crear, cargando, mostrarToast } = useStore()
   const [metodo, setMetodo] = useState<MetodoPago>('qr')
   const [enviando, setEnviando] = useState(false)
+  const [datos] = useState(() => datosCliente())
+  const [nombre, setNombre] = useState(datos.nombre)
+  const [telefono, setTelefono] = useState(datos.telefono)
+  const [opiniones, setOpiniones] = useState<Opinion[] | null>(null)
 
   const bolsa = id ? bolsaPorId(id) : undefined
+  const vendedorId = bolsa?.vendedorId
+
+  useEffect(() => {
+    if (!vendedorId) return
+    let vivo = true
+    getOpiniones(vendedorId)
+      .then((o) => vivo && setOpiniones(o))
+      .catch(() => vivo && setOpiniones([]))
+    return () => {
+      vivo = false
+    }
+  }, [vendedorId])
 
   useTitulo(
     bolsa
@@ -45,10 +63,21 @@ export default function Detalle() {
   const agotada = bolsa.disponibles <= 0
   const ventana = ventanaDeRecojo(bolsa.recojoInicio, bolsa.recojoFin)
 
+  const faltanDatos = !nombre.trim()
+
   const reservar = async () => {
+    if (faltanDatos) {
+      mostrarToast('Dinos tu nombre para que la casera sepa a quién entregar')
+      document.getElementById('nombre-cliente')?.focus()
+      return
+    }
     setEnviando(true)
-    const reserva = await crear(bolsa.id, metodo)
-    navigate(metodo === 'qr' ? `/pago/${reserva.id}` : `/reserva/${reserva.id}`)
+    try {
+      const reserva = await crear(bolsa.id, metodo, { nombre: nombre.trim(), telefono: telefono.trim() })
+      navigate(metodo === 'qr' ? `/pago/${reserva.id}` : `/reserva/${reserva.id}`)
+    } finally {
+      setEnviando(false)
+    }
   }
 
   const etiquetaBoton = agotada
@@ -102,7 +131,12 @@ export default function Detalle() {
                 {bolsa.vendedor.tipo} · {bolsa.distanciaKm} km · {bolsa.vendedor.direccion}
               </p>
             </div>
-            <Rating value={bolsa.vendedor.rating} />
+            <div className="text-right">
+              <Rating value={bolsa.vendedor.rating} />
+              <p className="text-[11px] text-muted-foreground">
+                {bolsa.vendedor.opiniones ? `${bolsa.vendedor.opiniones} ${bolsa.vendedor.opiniones === 1 ? 'opinión' : 'opiniones'}` : 'puesto nuevo'}
+              </p>
+            </div>
           </div>
 
           <div>
@@ -155,8 +189,8 @@ export default function Detalle() {
                 }`}
               >
                 <QrCode className="size-6 text-brand-dark" aria-hidden />
-                <span className="text-sm font-bold text-ink">QR Simple</span>
-                <span className="text-xs text-muted-foreground">Pagas ahora desde tu banco</span>
+                <span className="text-sm font-bold text-ink">QR</span>
+                <span className="text-xs text-muted-foreground">Pagas desde tu banco y subes la captura</span>
               </button>
               <button
                 type="button"
@@ -170,9 +204,59 @@ export default function Detalle() {
               >
                 <Banknote className="size-6 text-brand-dark" aria-hidden />
                 <span className="text-sm font-bold text-ink">Efectivo</span>
-                <span className="text-xs text-muted-foreground">Pagas al recoger la bolsa</span>
+                <span className="text-xs text-muted-foreground">Pagas cuando recoges</span>
               </button>
             </div>
+          </section>
+
+          <section className="space-y-2">
+            <h2 className="text-sm font-bold text-ink">¿A nombre de quién?</h2>
+            <p className="text-xs text-muted-foreground">La casera lo ve para saber a quién entregar. Se guarda en tu celular.</p>
+            <label className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4">
+              <UserRound className="size-5 shrink-0 text-brand-dark" aria-hidden />
+              <input
+                id="nombre-cliente"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value.slice(0, 60))}
+                placeholder="Tu nombre"
+                autoComplete="name"
+                className="min-h-12 w-full bg-transparent text-sm font-semibold text-ink placeholder:text-muted-foreground focus:outline-none"
+              />
+            </label>
+            <label className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4">
+              <Phone className="size-5 shrink-0 text-brand-dark" aria-hidden />
+              <input
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value.slice(0, 30))}
+                placeholder="Tu celular (opcional)"
+                inputMode="tel"
+                autoComplete="tel"
+                className="min-h-12 w-full bg-transparent text-sm font-semibold text-ink placeholder:text-muted-foreground focus:outline-none"
+              />
+            </label>
+          </section>
+
+          <section className="space-y-2">
+            <h2 className="text-sm font-bold text-ink">Lo que dicen los vecinos</h2>
+            {opiniones === null && <p className="text-xs text-muted-foreground">Cargando opiniones…</p>}
+            {opiniones?.length === 0 && (
+              <p className="text-sm text-muted-foreground">Todavía nadie calificó este puesto. Sé el primero cuando recojas tu pedido.</p>
+            )}
+            {opiniones && opiniones.length > 0 && (
+              <ul className="space-y-2">
+                {opiniones.slice(0, 5).map((o, i) => (
+                  <li key={i} className="rounded-2xl border border-border bg-card p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-bold text-ink">{o.nombre}</span>
+                      <span className="inline-flex items-center gap-1 text-xs font-bold text-ambar-ink">
+                        <Star className="size-3.5 fill-ambar text-ambar" aria-hidden /> {o.estrellas}/5 · {o.fecha}
+                      </span>
+                    </div>
+                    {o.comentario && <p className="mt-1 text-sm text-muted-foreground">{o.comentario}</p>}
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
 
           {/* Escritorio: el boton va en la columna, no flotando. */}
