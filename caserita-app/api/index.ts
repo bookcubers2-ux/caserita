@@ -18,6 +18,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 }
 
+/**
+ * El cuerpo se lee crudo y se decodifica como UTF-8 a mano: el parser de
+ * Vercel estropeaba las tildes y las eñes ("Áñez" llegaba roto).
+ */
+async function leerCuerpo(req: VercelRequest): Promise<unknown> {
+  try {
+    const trozos: Buffer[] = []
+    for await (const t of req) trozos.push(typeof t === 'string' ? Buffer.from(t) : (t as Buffer))
+    if (trozos.length) {
+      const texto = Buffer.concat(trozos).toString('utf8')
+      try {
+        return JSON.parse(texto)
+      } catch {
+        return texto
+      }
+    }
+  } catch {
+    // el stream ya fue consumido: caemos al body parseado por Vercel
+  }
+  const b = req.body
+  if (typeof b === 'string') {
+    try {
+      return JSON.parse(b)
+    } catch {
+      return b
+    }
+  }
+  if (Buffer.isBuffer(b)) {
+    try {
+      return JSON.parse(b.toString('utf8'))
+    } catch {
+      return b.toString('utf8')
+    }
+  }
+  return b
+}
+
 async function atender(req: VercelRequest, res: VercelResponse) {
   const url = new URL(req.url ?? '/', 'http://caserita')
   const ruta = url.pathname.replace(/^\/api/, '') || '/'
@@ -29,9 +66,12 @@ async function atender(req: VercelRequest, res: VercelResponse) {
       const v = req.headers[n.toLowerCase()]
       return Array.isArray(v) ? v[0] : v
     },
-    cuerpo: req.body,
+    cuerpo: await leerCuerpo(req),
   })
   res.setHeader('Cache-Control', 'no-store')
   if (r.status === 204) return res.status(204).end()
-  return res.status(r.status).json(r.cuerpo)
+  // Respuesta escrita a mano en UTF-8 por la misma razón.
+  res.statusCode = r.status
+  res.setHeader('Content-Type', 'application/json; charset=utf-8')
+  return res.end(Buffer.from(JSON.stringify(r.cuerpo), 'utf8'))
 }

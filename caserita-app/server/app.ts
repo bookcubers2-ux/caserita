@@ -348,7 +348,7 @@ async function subirComprobante(p: Peticion, id: string): Promise<Respuesta> {
     `📸 <b>COMPROBANTE DE PAGO</b>\n\n${await textoPedido(r)}`,
     botones,
   )
-  if (tg.telegramConfigurado() && !messageId) throw new ErrorHttp(502, 'No pudimos enviar el comprobante; intenta de nuevo')
+  if (tg.telegramConfigurado() && !messageId) throw new ErrorHttp(502, `No pudimos enviar el comprobante; intenta de nuevo (${tg.ultimoError || 'sin detalle'})`)
 
   await q(
     `UPDATE reservas SET metodo_pago = 'qr', estado_pago = 'verificando', comprobante_file_id = $1,

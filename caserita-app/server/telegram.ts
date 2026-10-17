@@ -12,6 +12,9 @@ const CHAT = () => process.env.TELEGRAM_CHAT_ID ?? ''
 
 export const telegramConfigurado = () => Boolean(TOKEN() && CHAT())
 
+/** Última descripción de error que devolvió Telegram, para diagnosticar desde la API. */
+export let ultimoError = ''
+
 async function llamar(metodo: string, cuerpo: BodyInit, json = true): Promise<Record<string, unknown>> {
   if (!TOKEN()) return { ok: false, description: 'Telegram sin configurar' }
   try {
@@ -21,10 +24,14 @@ async function llamar(metodo: string, cuerpo: BodyInit, json = true): Promise<Re
       body: cuerpo,
     })
     const r = (await res.json()) as Record<string, unknown>
-    if (!r.ok) console.error(`[telegram] ${metodo}:`, JSON.stringify(r).slice(0, 300))
+    if (!r.ok) {
+      console.error(`[telegram] ${metodo}:`, JSON.stringify(r).slice(0, 300))
+      ultimoError = String(r.description ?? `HTTP ${res.status}`)
+    }
     return r
   } catch (e) {
     console.error(`[telegram] ${metodo} falló:`, e)
+    ultimoError = e instanceof Error ? e.message : String(e)
     return { ok: false }
   }
 }
