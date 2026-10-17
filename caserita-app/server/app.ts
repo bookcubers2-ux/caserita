@@ -687,7 +687,7 @@ async function enrutar(p: Peticion): Promise<Respuesta> {
       if (!esAdmin(p)) throw new ErrorHttp(401, 'Clave inválida')
       const url = `${APP_URL()}/api/telegram/webhook`
       const r = await tg.registrarWebhook(url, process.env.TELEGRAM_WEBHOOK_SECRET ?? '')
-      return ok({ url, resultado: r, info: await tg.infoWebhook() })
+      return ok({ url, resultado: r, info: await tg.infoWebhook(), bot: await tg.quienSoy(), chat: await tg.pruebaChat() })
     }
   }
 

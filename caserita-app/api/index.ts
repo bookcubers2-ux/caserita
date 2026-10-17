@@ -57,6 +57,25 @@ async function leerCuerpo(req: VercelRequest): Promise<unknown> {
 
 async function atender(req: VercelRequest, res: VercelResponse) {
   const url = new URL(req.url ?? '/', 'http://caserita')
+  if (url.pathname === '/api/eco') {
+    // Diagnóstico de codificación: cómo llega el cuerpo a la función.
+    const trozos: { tipo: string; hex: string }[] = []
+    try {
+      for await (const t of req) trozos.push({ tipo: typeof t, hex: Buffer.isBuffer(t) ? t.toString('hex').slice(0, 60) : Buffer.from(String(t)).toString('hex').slice(0, 60) })
+    } catch (e) {
+      trozos.push({ tipo: 'error', hex: String(e) })
+    }
+    const b = req.body
+    const info = {
+      trozos,
+      bodyTipo: Buffer.isBuffer(b) ? 'buffer' : typeof b,
+      bodyHex: Buffer.isBuffer(b) ? b.toString('hex').slice(0, 60) : typeof b === 'string' ? Buffer.from(b).toString('hex').slice(0, 60) : JSON.stringify(b)?.slice(0, 60),
+      encabezado: req.headers['content-type'],
+      node: process.version,
+    }
+    res.setHeader('Content-Type', 'application/json; charset=utf-8')
+    return res.end(Buffer.from(JSON.stringify(info), 'utf8'))
+  }
   const ruta = url.pathname.replace(/^\/api/, '') || '/'
   const r = await manejar({
     metodo: req.method ?? 'GET',

@@ -92,6 +92,20 @@ export async function infoWebhook(): Promise<Record<string, unknown>> {
   return llamar('getWebhookInfo', JSON.stringify({}))
 }
 
+/** Nombre del bot al que pertenece el token (para ver que las variables estén bien). */
+export async function quienSoy(): Promise<string> {
+  const r = await llamar('getMe', JSON.stringify({}))
+  const u = r.result as { username?: string } | undefined
+  return u?.username ? '@' + u.username : 'token inválido: ' + (ultimoError || '?')
+}
+
+/** Comprueba que el bot pueda escribirle al chat configurado. */
+export async function pruebaChat(): Promise<string> {
+  const r = await llamar('getChat', JSON.stringify({ chat_id: CHAT() }))
+  const c = r.result as { first_name?: string; title?: string; username?: string } | undefined
+  return c ? `ok: ${c.first_name ?? c.title ?? ''} ${c.username ? '@' + c.username : ''}`.trim() : `chat ${CHAT()} no accesible: ${ultimoError || '?'}`
+}
+
 export function hora(ms = Date.now()): string {
   return new Date(ms).toLocaleString('es-BO', { timeZone: 'America/La_Paz', hour12: false })
 }
