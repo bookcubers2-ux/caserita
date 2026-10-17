@@ -26,7 +26,7 @@ export default function VendedorHoy() {
       <div className="grid grid-cols-2 gap-2 rounded-2xl bg-brand-soft p-4 text-center lg:max-w-md lg:gap-6 lg:p-6">
         <div>
           <p className="text-lg font-extrabold text-brand-dark">{totalVendidas}</p>
-          <p className="text-xs text-brand-dark">bolsas vendidas</p>
+          <p className="text-xs text-brand-dark">reservadas</p>
         </div>
         <div>
           <p className="text-lg font-extrabold text-brand-dark">Bs {totalBs}</p>
@@ -93,10 +93,11 @@ export default function VendedorHoy() {
         ))}
       </div>
 
-      <div className="lg:max-w-xs">
-        <LinkButton to="/vendedor" variant="brand">
-          Publicar otra bolsa
+      <div className="space-y-3 lg:max-w-xs">
+        <LinkButton to="/vendedor/pedidos" variant="brand">
+          Ver los pedidos de hoy
         </LinkButton>
+        <LinkButton to="/vendedor">Publicar otra cosa</LinkButton>
       </div>
     </div>
   )

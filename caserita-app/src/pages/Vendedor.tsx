@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Receipt } from 'lucide-react'
 import type { Categoria } from '../types'
 import { CATEGORIAS, FOTOS_DISPONIBLES, PLANTILLA_POR_CATEGORIA, TEXTO_SORPRESA } from '../data/seed'
 import { useStore } from '../store'
 import { useTitulo } from '../lib/useTitulo'
 import Foto from '../components/Foto'
+import EntrarPuesto from '../components/EntrarPuesto'
 import { Button, Chip, EtiquetaSorpresa, LinkButton, RoleSwitch } from '../components/ui'
 
 export default function Vendedor() {
   const navigate = useNavigate()
-  const { setRol, mostrarToast, publicar: publicarEnTienda } = useStore()
+  const { setRol, mostrarToast, publicar: publicarEnTienda, sesion, pedidosVendedor } = useStore()
 
   useTitulo(
     'Modo vendedor · Publica tu excedente en Caserita',
@@ -66,13 +68,39 @@ export default function Vendedor() {
     if (r === 'comprador') navigate('/')
   }
 
+  if (!sesion) {
+    return (
+      <div className="animate-rise pagina space-y-5 px-4 pb-10 pt-5">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-widest text-brand">Soy casera</p>
+          <h1 className="mt-1 text-2xl font-extrabold text-ink lg:text-3xl">Publica lo que te sobró hoy</h1>
+        </div>
+        <EntrarPuesto />
+        <div className="lg:max-w-xs">
+          <LinkButton to="/">Volver a comprar</LinkButton>
+        </div>
+      </div>
+    )
+  }
+
+  const porEntregar = pedidosVendedor.filter((r) => r.estado === 'activa').length
+
   return (
     <div className="animate-rise pagina space-y-5 px-4 pb-10 pt-5">
       <div>
-        <p className="text-sm font-bold uppercase tracking-widest text-brand">Modo vendedor</p>
+        <p className="text-sm font-bold uppercase tracking-widest text-brand">{sesion.vendedor.nombre}</p>
         <h1 className="mt-1 text-2xl font-extrabold text-ink lg:text-3xl">
           Publica lo que te sobró hoy
         </h1>
+        <Link
+          to="/vendedor/pedidos"
+          className="tap mt-3 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2.5 text-sm font-bold text-primary-foreground shadow-lift"
+        >
+          <Receipt className="size-4" aria-hidden /> Pedidos de hoy
+          {porEntregar > 0 && (
+            <span className="grid size-5 place-items-center rounded-full bg-naranja text-[11px] font-extrabold text-ink">{porEntregar}</span>
+          )}
+        </Link>
         <p className="mt-1.5 hidden text-sm text-muted-foreground lg:block">
           Ponle nombre y foto para que el cliente sepa qué se lleva.
         </p>

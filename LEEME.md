@@ -1,6 +1,8 @@
 # Caserita
 
-Marketplace de bolsas sorpresa de comida rescatada en Santa Cruz de la Sierra.
+Comida buena, barata y sin desperdicio: las caseras de Santa Cruz publican lo que les sobró y los vecinos lo reservan, pagan con QR y recogen.
+
+> **Octubre 2026:** la app tiene backend real (función de Vercel + Postgres en Neon), pago con QR verificado por Telegram, panel de pedidos para la casera y calificaciones. Cómo ponerlo en marcha y los códigos de cada puesto: `caserita-app/PUESTA_EN_MARCHA.md`.
 
 ## Piezas
 

@@ -1,67 +1,33 @@
-import QRCode from 'qrcode'
 import type { EstadoPago } from '../types'
 
 /**
- * Pago con QR Simple.
+ * Cómo se cobra hoy en Caserita (mientras no exista la cuenta de comercio
+ * con el banco que emita un QR por cada venta):
  *
- * IMPORTANTE: un QR Simple con validez bancaria lo emite el banco adquirente
- * (ACH Bolivia / Banco Unión) contra una cuenta de comercio, y la confirmación
- * llega por webhook desde el banco. Mientras no exista ese convenio:
- *   1. el QR codifica una referencia de cobro en TEXTO PLANO, no una URL, para
- *      que nadie termine en un dominio que no existe al escanearlo;
- *   2. el cobro solo avanza cuando la persona declara que pagó. Nada se
- *      confirma solo: una pantalla que dice "pago recibido" sin que nadie
- *      haya pagado destruye la credibilidad de la demo.
- * Cuando exista la integración se reemplazan `construirPayload` (por el payload
- * EMVCo del banco) y `confirmarPago` (por el webhook real).
+ *   1. el vecino ve el QR de cobro de Caserita (public/qr-cobro.png: es el
+ *      QR de la cuenta bancaria de Caserita, el mismo para todos) y el monto;
+ *   2. paga desde su app bancaria y sube la captura del comprobante;
+ *   3. la captura llega a Telegram y la aceptamos o rechazamos a mano;
+ *   4. la app consulta cada pocos segundos y muestra el resultado.
+ *
+ * Cuando exista el convenio, el QR por venta reemplaza a la imagen fija y el
+ * webhook del banco reemplaza al botón de Telegram. El resto no cambia.
  */
 
-export interface DatosCobro {
-  codigo: string
-  negocio: string
-  monto: number
-}
+/** Imagen del QR de cobro. Reemplazar el archivo por el QR real de la cuenta de Caserita. */
+export const QR_COBRO_URL = '/qr-cobro.png'
 
-/** Texto plano legible: ninguna app lo confunde con un cobro bancario real. */
-export function construirPayload({ codigo, negocio, monto }: DatosCobro): string {
-  return [
-    'CASERITA',
-    'COBRO DE DEMOSTRACION',
-    `Negocio: ${negocio}`,
-    `Referencia: ${codigo}`,
-    `Monto: BOB ${monto.toFixed(2)}`,
-    'Sin convenio bancario: no genera un pago real.',
-  ].join('\n')
-}
-
-/** Devuelve el QR como SVG (string) listo para inyectar. */
-export async function generarQrSvg(datos: DatosCobro): Promise<string> {
-  return QRCode.toString(construirPayload(datos), {
-    type: 'svg',
-    errorCorrectionLevel: 'M',
-    margin: 1,
-    width: 220,
-    color: { dark: '#17201A', light: '#00000000' },
-  })
-}
-
-export function nuevaReferencia(): string {
-  return `TXN${Math.floor(Math.random() * 900000 + 100000)}`
-}
-
-/**
- * Acredita el cobro. Solo se llama cuando la persona declara que ya pagó.
- * Con backend real esto se cambia por la consulta al estado de la transacción.
- */
-export async function confirmarPago(): Promise<{ referencia: string }> {
-  await new Promise((r) => setTimeout(r, 1600))
-  return { referencia: nuevaReferencia() }
-}
+/** Cada cuánto consulta la app si el pago ya fue verificado. */
+export const INTERVALO_SONDEO_MS = 5000
 
 export const ETIQUETA_ESTADO: Record<EstadoPago, string> = {
-  pendiente: 'Pago pendiente',
-  esperando: 'Esperando tu pago',
-  procesando: 'Procesando en el banco',
+  pendiente: 'Por pagar',
+  verificando: 'Revisando tu pago',
   pagado: 'Pago confirmado',
-  expirado: 'QR vencido',
+  rechazado: 'Comprobante rechazado',
+}
+
+/** Lo que el vecino escribe como glosa al pagar, para que la encontremos rápido. */
+export function glosaDePago(codigo: string): string {
+  return `CASERITA ${codigo}`
 }

@@ -13,8 +13,8 @@ export default function Pago() {
   const reserva = id ? reservaPorId(id) : undefined
 
   useTitulo(
-    reserva ? 'Pagar con QR Simple · Caserita' : 'Página no encontrada · Caserita',
-    reserva ? 'Confirma el pago de tu bolsa reservada en Caserita.' : undefined,
+    reserva ? 'Pagar con QR · Caserita' : 'Página no encontrada · Caserita',
+    reserva ? 'Paga con el QR de Caserita y sube tu comprobante.' : undefined,
   )
 
   if (cargando || (reserva && !reserva.bolsa)) {
@@ -47,7 +47,7 @@ export default function Pago() {
         <div className="mt-4 space-y-3 rounded-2xl border border-border bg-card p-4 shadow-card lg:mt-0">
           <h2 className="text-sm font-bold text-ink">Detalle de la reserva</h2>
           <div className="flex items-center justify-between gap-3">
-            <span className="text-sm text-muted-foreground">Negocio</span>
+            <span className="text-sm text-muted-foreground">Puesto</span>
             <span className="min-w-0 truncate text-sm font-bold text-ink">
               {reserva.bolsa.vendedor.nombre}
             </span>
