@@ -75,3 +75,8 @@
 .leaflet-control-attribution a {
   color: #0e5a2b;
 }
+
+/* Tiles de OSM: menos color para que los pines verdes manden. */
+.tiles-suaves {
+  filter: saturate(0.45) brightness(1.04) contrast(0.92);
+}

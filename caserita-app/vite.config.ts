@@ -45,7 +45,7 @@ export default defineConfig({
           {
             // Tiles del mapa: se guardan para que el mapa siga viéndose aunque
             // la sala del pitch tenga mala señal.
-            urlPattern: /^https:\/\/[a-d]\.basemaps\.cartocdn\.com\/.*/i,
+            urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'mapa-tiles',

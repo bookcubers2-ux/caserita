@@ -367,12 +367,14 @@ export default function MapaReal({
         touchZoom
         className="size-full"
       >
+        {/* CARTO empezó a pedir API key (oct 2026) y devolvía "API KEY REQUIRED"
+            en cada tile. Los tiles estándar de OSM no piden clave; se desaturan
+            con CSS para que el mapa siga en segundo plano frente a los pines. */}
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          subdomains={['a', 'b', 'c', 'd']}
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           maxZoom={19}
-          detectRetina
+          className="tiles-suaves"
         />
 
         <AjustarAlContenedor />
